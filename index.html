@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI News Generator - Nakhon Phanom Lands Office</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 min-h-screen text-gray-800 p-6">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-indigo-900 mb-2">ระบบสร้างข่าวประชาสัมพันธ์ AI</h1>
+            <p class="text-gray-600">สำนักงานที่ดินจังหวัดนครพนม</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Left Column: Input -->
+            <div class="space-y-6">
+                <!-- 1. Upload Image -->
+                <div class="glass rounded-2xl p-6 relative group transition-all hover:shadow-xl">
+                    <div
+                        class="absolute -top-3 left-4 bg-indigo-600 text-white px-3 py-1 rounded-full text-sm font-medium shadow-md">
+                        Step 1: แหล่งข้อมูล (รูปภาพ/ข้อความ)</div>
+
+                    <!-- Tabs -->
+                    <div class="flex space-x-1 bg-gray-100 p-1 rounded-xl mt-4 mb-4">
+                        <button onclick="switchTab('image')" id="tab-image"
+                            class="flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all bg-white text-indigo-600 shadow-sm">
+                            🖼️ รูปภาพ / แคปหน้าจอ
+                        </button>
+                        <button onclick="switchTab('text')" id="tab-text"
+                            class="flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all text-gray-500 hover:text-gray-700">
+                            📝 ข้อความ
+                        </button>
+                    </div>
+
+                    <!-- Image Content -->
+                    <div id="content-image">
+                        <div id="drop-zone"
+                            class="border-2 border-dashed border-indigo-300 rounded-xl p-8 text-center cursor-pointer hover:bg-indigo-50 transition-colors relative">
+                            <svg class="w-12 h-12 text-indigo-400 mx-auto mb-3" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                </path>
+                            </svg>
+                            <p class="text-indigo-600 font-medium">คลิกเลือกรูป / วางรูป (Ctrl+V)</p>
+                            <p class="text-xs text-indigo-400 mt-1 mb-3">หรือลากไฟล์มาวาง</p>
+
+                            <button onclick="event.stopPropagation(); captureScreen()"
+                                class="bg-white border border-indigo-200 text-indigo-600 px-3 py-1 rounded-full text-xs hover:bg-indigo-50 shadow-sm flex items-center gap-1 mx-auto">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
+                                    </path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                ถ่ายภาพหน้าจอ (Screen Capture)
+                            </button>
+
+                            <input type="file" id="file-input" class="hidden" accept="image/*">
+                        </div>
+                        <div id="preview-container" class="mt-4 hidden text-center">
+                            <img id="image-preview" class="max-h-48 rounded-lg shadow-md mx-auto" src="">
+                            <button onclick="resetImage()"
+                                class="mt-2 text-xs text-red-500 hover:underline">ยกเลิก/เลือกใหม่</button>
+                        </div>
+                    </div>
+
+                    <!-- Text Content -->
+                    <div id="content-text" class="hidden">
+                        <textarea id="input-text-source" rows="6"
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border text-sm"
+                            placeholder="วางข้อความจากหนังสือเวียน หรือกำหนดการที่นี่..."></textarea>
+                        <button onclick="uploadTextToN8n()"
+                            class="mt-3 w-full bg-indigo-100 hover:bg-indigo-200 text-indigo-700 py-2 rounded-lg text-sm font-medium transition-colors">
+                            ⚡ อ่านข้อมูลจากข้อความ
+                        </button>
+                    </div>
+                </div>
+                <!-- 2. Form Edit -->
+                <div class="glass rounded-2xl p-6 relative transition-all hover:shadow-xl">
+                    <div
+                        class="absolute -top-3 left-4 bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium shadow-md">
+                        Step 2: ตรวจสอบข้อมูล</div>
+                    <div class="mt-4 space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">วันที่</label>
+                            <input type="text" id="date"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                                placeholder="เช่น 25 ธันวาคม 2568">
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-1">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">เวลา</label>
+                                <input type="text" id="time"
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                                    placeholder="HH.MM น.">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ประธานในพิธี</label>
+                            <select onchange="updatePresident(this.value)"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border mb-2 bg-white">
+                                <option value="">-- เลือกจากรายการ --</option>
+                                <option value="ว่าที่พันตรี อดิศักดิ์ น้อยสุวรรณ|ผู้ว่าราชการจังหวัดนครพนม">
+                                    ผู้ว่าราชการจังหวัดนครพนม (ว่าที่พันตรี อดิศักดิ์ น้อยสุวรรณ)</option>
+                                <option value="นายวีระ ฤกษ์วาณิชย์กุล|รองผู้ว่าราชการจังหวัดนครพนม">รองผู้ว่าฯ (นายวีระ
+                                    ฤกษ์วาณิชย์กุล)</option>
+                                <option value="นายวรวิทย์ พิมพนิตย์|รองผู้ว่าราชการจังหวัดนครพนม">รองผู้ว่าฯ (นายวรวิทย์
+                                    พิมพนิตย์)</option>
+                                <option value="ว่าที่ร้อยตรี รวยรุ่ง ใครบุตร|รองผู้ว่าราชการจังหวัดนครพนม">รองผู้ว่าฯ
+                                    (ว่าที่ร้อยตรี รวยรุ่ง ใครบุตร)</option>
+                                <option value="นายธเนศ ชาตะวราหะ|เจ้าพนักงานที่ดินจังหวัดนครพนม">
+                                    เจ้าพนักงานที่ดินจังหวัดนครพนม (นายธเนศ ชาตะวราหะ)</option>
+                            </select>
+                            <input type="text" id="president_name"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                                placeholder="ชื่อประธาน">
+                            <input type="text" id="president_position"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border mt-2 text-sm text-gray-500"
+                                placeholder="ตำแหน่ง">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อกิจกรรม</label>
+                            <textarea id="event_name" rows="2"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                                placeholder="ทำอะไร..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">สถานที่</label>
+                            <input type="text" id="location"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                                placeholder="ณ ที่ไหน...">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ผู้เข้าร่วม (สนง.ที่ดิน)</label>
+                            <div class="space-y-2 p-3 bg-gray-50 rounded-lg border max-h-40 overflow-y-auto mb-2">
+                                <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 p-1 rounded">
+                                    <input type="checkbox" onchange="toggleParticipant(this)"
+                                        class="rounded text-indigo-600 focus:ring-indigo-500"
+                                        value="นายธเนศ ชาตะวราหะ เจ้าพนักงานที่ดินจังหวัดนครพนม">
+                                    <span class="text-sm">นายธเนศ ชาตะวราหะ (เจ้าพนักงานที่ดินฯ)</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 p-1 rounded">
+                                    <input type="checkbox" onchange="toggleParticipant(this)"
+                                        class="rounded text-indigo-600 focus:ring-indigo-500"
+                                        value="นายฉัตรชัย สาขี หัวหน้ากลุ่มงานวิชาการที่ดิน">
+                                    <span class="text-sm">นายฉัตรชัย สาขี (หน.วิชาการ)</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 p-1 rounded">
+                                    <input type="checkbox" onchange="toggleParticipant(this)"
+                                        class="rounded text-indigo-600 focus:ring-indigo-500"
+                                        value="พันจ่าตรีนครินทร์ พรหมมา หัวหน้าฝ่ายทะเบียน">
+                                    <span class="text-sm">พันจ่าตรีนครินทร์ พรหมมา (หน.ทะเบียน)</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 p-1 rounded">
+                                    <input type="checkbox" onchange="toggleParticipant(this)"
+                                        class="rounded text-indigo-600 focus:ring-indigo-500" value="หัวหน้าฝ่ายรังวัด">
+                                    <span class="text-sm">หัวหน้าฝ่ายรังวัด</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 p-1 rounded">
+                                    <input type="checkbox" onchange="toggleParticipant(this)"
+                                        class="rounded text-indigo-600 focus:ring-indigo-500"
+                                        value="นางสาวพิสมัย นาโสก หัวหน้าฝ่ายอำนวยการ">
+                                    <span class="text-sm">นางสาวพิสมัย นาโสก (หน.อำนวยการ)</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 p-1 rounded">
+                                    <input type="checkbox" onchange="toggleParticipant(this)"
+                                        class="rounded text-indigo-600 focus:ring-indigo-500"
+                                        value="เจ้าหน้าที่สำนักงานที่ดินจังหวัดนครพนม" checked>
+                                    <span class="text-sm">เจ้าหน้าที่สำนักงานที่ดินจังหวัดนครพนม (เหมา)</span>
+                                </label>
+                            </div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">รายชื่อผู้เข้าร่วม
+                                (แก้ไขได้)</label>
+                            <textarea id="participants_area" rows="4"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border text-sm"
+                                placeholder="รายชื่อผู้เข้าร่วมจะปรากฏที่นี่..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="generateNews()"
+                    class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-4 rounded-xl shadow-lg transform transition hover:scale-[1.02] flex items-center justify-center gap-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
+                        </path>
+                    </svg>
+                    สร้างข่าวประชาสัมพันธ์ (Generate)
+                </button>
+            </div>
+            <!-- Right Column: Output -->
+            <div class="glass rounded-2xl p-6 relative flex flex-col h-full min-h-[500px]">
+                <div
+                    class="absolute -top-3 left-4 bg-pink-600 text-white px-3 py-1 rounded-full text-sm font-medium shadow-md">
+                    Step 3: ผลลัพธ์</div>
+                <h2 class="text-lg font-semibold text-gray-700 mt-4 mb-2">เนื้อหาข่าว:</h2>
+                <div class="flex-1 bg-white rounded-xl border border-gray-200 p-6 shadow-inner relative group">
+                    <textarea id="result-text"
+                        class="w-full h-full resize-none outline-none text-gray-800 leading-relaxed text-lg"
+                        placeholder="ผลลัพธ์จะปรากฏที่นี่... (สามารถพิมพ์แก้ไขได้)"></textarea>
+                    <button onclick="copyToClipboard()"
+                        class="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-lg transition-colors"
+                        title="คัดลอก">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // CONFIGURATION: Replace with your n8n webhook URLs
+        const N8N_EXTRACT_URL = 'http://192.168.44.252:5678/webhook/extract';
+        const N8N_GENERATE_URL = 'http://192.168.44.252:5678/webhook/generate';
+
+        // --- Tabs Logic ---
+        function switchTab(mode) {
+            if (mode === 'image') {
+                document.getElementById('content-image').classList.remove('hidden');
+                document.getElementById('content-text').classList.add('hidden');
+                document.getElementById('tab-image').classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
+                document.getElementById('tab-image').classList.remove('text-gray-500');
+                document.getElementById('tab-text').classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
+                document.getElementById('tab-text').classList.add('text-gray-500');
+            } else {
+                document.getElementById('content-image').classList.add('hidden');
+                document.getElementById('content-text').classList.remove('hidden');
+                document.getElementById('tab-text').classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
+                document.getElementById('tab-text').classList.remove('text-gray-500');
+                document.getElementById('tab-image').classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
+                document.getElementById('tab-image').classList.add('text-gray-500');
+
+                // Auto-focus the textarea so user can paste immediately
+                setTimeout(() => document.getElementById('input-text-source').focus(), 50);
+            }
+        }
+
+        // --- Drag & Drop & Paste Logic ---
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const previewContainer = document.getElementById('preview-container');
+        const imagePreview = document.getElementById('image-preview');
+
+        dropZone.onclick = () => fileInput.click();
+        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('bg-indigo-100'); };
+        dropZone.ondragleave = () => dropZone.classList.remove('bg-indigo-100');
+        dropZone.ondrop = (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('bg-indigo-100');
+            handleFile(e.dataTransfer.files[0]);
+        };
+        fileInput.onchange = (e) => handleFile(e.target.files[0]);
+
+        // Global Paste Listener (Ctrl+V)
+        document.onpaste = function (event) {
+            const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+            for (let index in items) {
+                const item = items[index];
+                if (item.kind === 'file' && item.type.includes('image/')) {
+                    const blob = item.getAsFile();
+                    handleFile(blob);
+                    // Switch to image tab if not active
+                    switchTab('image');
+                    break;
+                }
+            }
+        };
+
+        // Screen Capture Logic
+        async function captureScreen() {
+            try {
+                const stream = await navigator.mediaDevices.getDisplayMedia({
+                    video: { cursor: "always" },
+                    audio: false
+                });
+                // Create invisible video element to grab frame
+                const video = document.createElement("video");
+                video.srcObject = stream;
+                video.play();
+
+                // Wait a bit for video to initialize
+                await new Promise(r => setTimeout(r, 500));
+
+                const canvas = document.createElement("canvas");
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                // Stop sharing
+                stream.getTracks().forEach(track => track.stop());
+
+                canvas.toBlob(blob => {
+                    const file = new File([blob], "screenshot.png", { type: "image/png" });
+                    handleFile(file);
+                }, 'image/png');
+
+            } catch (err) {
+                console.warn("Screen capture cancelled or failed:", err);
+            }
+        }
+
+        function handleFile(file) {
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imagePreview.src = e.target.result;
+                    dropZone.classList.add('hidden');
+                    previewContainer.classList.remove('hidden');
+                    uploadImageToN8n(file); // Trigger Upload
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function resetImage() {
+            fileInput.value = '';
+            dropZone.classList.remove('hidden');
+            previewContainer.classList.add('hidden');
+        }
+
+        // --- Init Participants ---
+        function initParticipants() {
+            const checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
+            const area = document.getElementById('participants_area');
+            let initial = [];
+            checkboxes.forEach(cb => initial.push(cb.value));
+            area.value = initial.join(' พร้อมด้วย ');
+
+            // Default check text tab source
+            document.getElementById('input-text-source').value = '';
+        }
+
+        function toggleParticipant(checkbox) {
+            const area = document.getElementById('participants_area');
+            let currentText = area.value;
+            const val = checkbox.value;
+
+            if (checkbox.checked) {
+                if (currentText.trim() === '') {
+                    area.value = val;
+                } else {
+                    area.value = currentText + ' พร้อมด้วย ' + val;
+                }
+            } else {
+                let newText = currentText.replace(' พร้อมด้วย ' + val, '').replace(val + ' พร้อมด้วย ', '').replace(val, '');
+                area.value = newText;
+            }
+        }
+
+        // --- Shared Response Processor ---
+        function processExtractionResponse(data) {
+            // FIX: If AI returns JSON wrapped in "text" or "output" field
+            if (data.text || data.output) {
+                try {
+                    let innerText = data.text || data.output;
+                    innerText = innerText.replace(/```json/g, '').replace(/```/g, '').trim();
+                    data = JSON.parse(innerText);
+                } catch (e) {
+                    console.warn("Could not parse inner JSON, using raw data");
+                }
+            }
+
+            // Auto-fill fields
+            if (data.date) document.getElementById('date').value = data.date;
+            if (data.time) document.getElementById('time').value = data.time;
+            if (data.president_name) document.getElementById('president_name').value = data.president_name;
+            if (data.president_position) document.getElementById('president_position').value = data.president_position;
+            if (data.event_name) document.getElementById('event_name').value = data.event_name;
+            if (data.location) document.getElementById('location').value = data.location;
+            if (data.participants) document.getElementById('participants_area').value = data.participants;
+
+            Swal.close();
+            Swal.fire({ icon: 'success', title: 'อ่านข้อมูลเรียบร้อย', timer: 1500, showConfirmButton: false });
+        }
+
+        // --- API Functions ---
+        async function uploadImageToN8n(file) {
+            Swal.fire({ title: 'กำลังอ่านข้อมูลจากภาพ...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            const formData = new FormData();
+            formData.append('data', file);
+            try {
+                const response = await fetch(N8N_EXTRACT_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!response.ok) throw new Error('Network response was not ok');
+                let data = await response.json();
+                processExtractionResponse(data);
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', text: 'รายละเอียด: ' + error.message });
+            }
+        }
+
+        async function uploadTextToN8n() {
+            const text = document.getElementById('input-text-source').value;
+            if (!text.trim()) return Swal.fire('เตือน', 'กรุณาวางข้อความก่อนครับ', 'warning');
+
+            Swal.fire({ title: 'กำลังวิเคราะห์ข้อความ...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            try {
+                // Determine if we need to adjust format. Try sending as JSON `chatInput`
+                const response = await fetch(N8N_EXTRACT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chatInput: text })
+                });
+                if (!response.ok) throw new Error('Network response was not ok');
+                let data = await response.json();
+                processExtractionResponse(data);
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', text: 'รายละเอียด: ' + error.message });
+            }
+        }
+
+        async function generateNews() {
+            Swal.fire({ title: 'กำลังเขียนข่าว...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            const participants = document.getElementById('participants_area').value;
+            const payload = {
+                date: document.getElementById('date').value,
+                time: document.getElementById('time').value,
+                president_name: document.getElementById('president_name').value,
+                president_position: document.getElementById('president_position').value,
+                event_name: document.getElementById('event_name').value,
+                location: document.getElementById('location').value,
+                participants: participants
+            };
+            try {
+                const response = await fetch(N8N_GENERATE_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json();
+                let newsContent = data.output || data.news || data.text || JSON.stringify(data);
+                if (typeof newsContent === 'string' && newsContent.startsWith('{')) {
+                    try { const parsed = JSON.parse(newsContent); newsContent = parsed.news || newsContent; } catch (e) { }
+                }
+                document.getElementById('result-text').value = newsContent;
+                Swal.close();
+            } catch (error) {
+                console.error(error);
+                Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', text: 'รายละเอียด: ' + error.message });
+            }
+        }
+
+        function updatePresident(val) {
+            if (!val) return;
+            const parts = val.split('|');
+            document.getElementById('president_name').value = parts[0];
+            document.getElementById('president_position').value = parts[1];
+        }
+
+        function copyToClipboard() {
+            const copyText = document.getElementById("result-text");
+            copyText.select();
+            document.execCommand("copy");
+            Swal.fire({ icon: 'success', title: 'คัดลอกแล้ว', timer: 1000, showConfirmButton: false });
+        }
+
+        document.addEventListener('DOMContentLoaded', initParticipants);
+    </script>
+    ```

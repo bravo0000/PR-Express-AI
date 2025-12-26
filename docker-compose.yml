@@ -1,0 +1,67 @@
+version: '3.8'
+services:
+  # 1. Database (PostgreSQL)
+  db:
+    image: postgres:16-alpine
+    container_name: dev-postgres
+    restart: always
+    environment:
+      TZ: Asia/Bangkok
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - dev-network
+  # 2. File Storage (MinIO)
+  minio:
+    image: minio/minio:latest
+    container_name: dev-minio
+    restart: always
+    command: server /data --console-address ":9001"
+    environment:
+      TZ: Asia/Bangkok
+      MINIO_ROOT_USER: ${MINIO_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
+    ports:
+      - "9000:9000" # API Port
+      - "9001:9001" # Console Port
+    volumes:
+      - minio_data:/data
+    networks:
+      - dev-network
+  # 3. Code Storage (Gitea)
+  gitea:
+    image: gitea/gitea:latest
+    container_name: dev-gitea
+    restart: always
+    environment:
+      - TZ=Asia/Bangkok
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__database__DB_TYPE=postgres
+      - GITEA__database__HOST=db:5432
+      - GITEA__database__NAME=gitea
+      - GITEA__database__USER=${DB_USER}
+      - GITEA__database__PASSWD=${DB_PASSWORD}
+    ports:
+      - "3000:3000" # Web UI
+      - "222:22" # SSH Port
+    volumes:
+      - gitea_data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - db
+    networks:
+      - dev-network
+volumes:
+  postgres_data:
+  minio_data:
+  gitea_data:
+networks:
+  dev-network:
+    driver: bridge
