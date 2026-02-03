@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  ai-news-generator:
+    build: .
+    image: ai-news-generator:latest
+    container_name: ai-news-generator
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - PORT=3000
+      - NODE_ENV=production
+    volumes:
+      - ./news.db:/app/news.db
+      - ./index.html:/app/index.html
+      - ./server.js:/app/server.js
+    networks:
+      - ai-news-network
+
+networks:
+  ai-news-network:
+    driver: bridge

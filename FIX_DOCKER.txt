@@ -1,0 +1,15 @@
+# Fix Docker Compose on Linux
+# Run this on your server:
+
+# 1. Remove old/broken versions
+apt-get remove docker-compose -y
+
+# 2. Download official Docker Compose V2 standalone binary
+curl -SL https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+
+# 3. Make it executable
+chmod +x /usr/local/bin/docker-compose
+
+# 4. Verify
+docker-compose --version
+# Should show "Docker Compose version v2.24.5-..."

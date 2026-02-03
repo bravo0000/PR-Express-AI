@@ -122,20 +122,22 @@
                         <div class="mt-4 space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">วันที่</label>
-                                <input type="date" id="date"
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border cursor-pointer">
+                                <input type="text" id="date"
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                                    placeholder="เช่น 25 ธันวาคม 2568">
                             </div>
                             <div class="flex gap-4">
                                 <div class="flex-1">
                                     <label class="block text-sm font-medium text-gray-700 mb-1">เวลา</label>
-                                    <input type="time" id="time"
-                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border cursor-pointer">
+                                    <input type="text" id="time"
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                                        placeholder="HH.MM น.">
                                 </div>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">ประธานในพิธี</label>
-                                <select id="president-select" onchange="updatePresident(this.value)" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500
-                                focus:ring-indigo-500 p-2 border mb-2 bg-white">
+                                <select onchange="updatePresident(this.value)"
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border mb-2 bg-white">
                                     <option value="">-- เลือกจากรายการ --</option>
                                     <option value="ว่าที่พันตรี อดิศักดิ์ น้อยสุวรรณ|ผู้ว่าราชการจังหวัดนครพนม">
                                         ผู้ว่าราชการจังหวัดนครพนม (ว่าที่พันตรี อดิศักดิ์ น้อยสุวรรณ)</option>
@@ -149,7 +151,7 @@
                                         รองผู้ว่าฯ
                                         (ว่าที่ร้อยตรี รวยรุ่ง ใครบุตร)</option>
                                     <option value="นายธเนศ ชาตะวราหะ|เจ้าพนักงานที่ดินจังหวัดนครพนม">
-                                        เจ้าพนักงานที่ดินฯ (นายธเนศ ชาตะวราหะ)</option>
+                                        เจ้าพนักงานที่ดินจังหวัดนครพนม (นายธเนศ ชาตะวราหะ)</option>
                                 </select>
                                 <input type="text" id="president_name"
                                     class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
@@ -225,26 +227,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex flex-col gap-3">
-                        <button onclick="generateNews()"
-                            class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-4 rounded-xl shadow-lg transform transition hover:scale-[1.02] flex items-center justify-center gap-2">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
-                                </path>
-                            </svg>
-                            สร้างข่าวประชาสัมพันธ์ (AI Generate)
-                        </button>
-                        <button onclick="generateTemplateNews()"
-                            class="w-full bg-white border-2 border-indigo-200 text-indigo-700 hover:bg-indigo-50 font-bold py-3 rounded-xl shadow-sm transform transition hover:scale-[1.01] flex items-center justify-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                </path>
-                            </svg>
-                            สร้างตามแบบฟอร์ม (ไม่ใช้ AI)
-                        </button>
-                    </div>
+                    <button onclick="generateNews()"
+                        class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-4 rounded-xl shadow-lg transform transition hover:scale-[1.02] flex items-center justify-center gap-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
+                            </path>
+                        </svg>
+                        สร้างข่าวประชาสัมพันธ์ (Generate)
+                    </button>
                 </div>
                 <!-- Right Column: Output -->
                 <div class="glass rounded-2xl p-6 relative flex flex-col h-full min-h-[500px]">
@@ -334,75 +325,35 @@
         <!-- PAGE 3: SETTINGS (Hidden by default) -->
         <div id="page-settings" class="hidden">
             <div class="glass rounded-2xl p-8 relative max-w-4xl mx-auto">
-                <div
-                    class="absolute -top-3 left-4 bg-purple-700 text-white px-3 py-1 rounded-full text-sm font-medium shadow-md">
-                    ⚙️ ตั้งค่า</div>
+                <div class="absolute -top-3 left-4 bg-purple-700 text-white px-3 py-1 rounded-full text-sm font-medium shadow-md"> �����к�</div>
                 <form id="settings-form" class="mt-6 space-y-6">
                     <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"><span
-                                class="text-2xl"></span> AI Model</h3>
-                        <select id="setting-ai-model"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border bg-white">
-                            <option value="gemini-2.5-flash">Gemini 2.5 Flash (ใหม่ล่าสุด! 🚀)</option>
-                            <option value="gemini-1.5-flash">Gemini 1.5 Flash (Alias)</option>
-                            <option value="gemini-1.5-flash-001">Gemini 1.5 Flash (001)</option>
-                            <option value="gemini-1.5-flash-002">Gemini 1.5 Flash (002)</option>
-                            <option value="gemini-1.5-flash-latest">Gemini 1.5 Flash (Latest)</option>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"><span class="text-2xl"></span> AI Model</h3>
+                        <select id="setting-ai-model" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border bg-white">
+                            <option value="gemini-1.5-flash">Gemini 1.5 Flash (�й�)</option>
                             <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
-                            <option value="gemini-pro">Gemini 1.0 Pro (เก่าแต่ชัวร์)</option>
                             <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash</option>
                         </select>
                     </div>
                     <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"><span
-                                class="text-2xl">🏢</span> ชื่อหน่วยงาน</h3>
-                        <input type="text" id="setting-organization-name"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"><span class="text-2xl"></span> ��˹�§ҹ</h3>
+                        <input type="text" id="setting-organization-name" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border">
                     </div>
                     <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"><span
-                                class="text-2xl"></span> Extraction Prompt</h3>
-                        <textarea id="setting-extraction-prompt" rows="10"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border font-mono text-sm"></textarea>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"><span class="text-2xl"></span> Extraction Prompt</h3>
+                        <textarea id="setting-extraction-prompt" rows="10" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border font-mono text-sm"></textarea>
                     </div>
                     <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"><span
-                                class="text-2xl"></span> Generation Prompt</h3>
-                        <textarea id="setting-generation-prompt" rows="12"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border font-mono text-sm"></textarea>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"><span class="text-2xl"></span> Generation Prompt</h3>
+                        <textarea id="setting-generation-prompt" rows="12" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border font-mono text-sm"></textarea>
                     </div>
                     <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"><span
-                                class="text-2xl">�</span> รายการประธานในพิธี</h3>
-                        <p class="text-sm text-gray-600 mb-3">กรอกข้อมูลแต่ละคนในรูปแบบ: ชื่อ | ตำแหน่ง (คั่นด้วย "|")
-                        </p>
-                        <textarea id="setting-presidents-list" rows="6"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border font-mono text-sm"
-                            placeholder="ว่าที่พันตรี อดิศักดิ์ น้อยสุวรรณ | ผู้ว่าราชการจังหวัดนครพนม"></textarea>
-                    </div>
-                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"><span
-                                class="text-2xl">👥</span> รายการผู้เข้าร่วม (สนง.ที่ดิน)</h3>
-                        <p class="text-sm text-gray-600 mb-3">กรอกข้อมูลแต่ละคนในรูปแบบ: ชื่อ-นามสกุล | ชื่อแสดง
-                            (คั่นด้วย "|")</p>
-                        <textarea id="setting-participants-list" rows="6"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border font-mono text-sm"
-                            placeholder="นายฉัตรชัย สาขี หัวหน้ากลุ่มงานวิชาการที่ดิน | นายฉัตรชัย สาขี (หน.วิชาการ)"></textarea>
-                    </div>
-                    <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"><span
-                                class="text-2xl">�📊</span> จำนวนข่าวในประวัติ</h3>
-                        <input type="number" id="setting-max-news-history" min="10" max="200"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border"
-                            value="50">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"><span class="text-2xl"></span> �ӹǹ���㹻��ǵ</h3>
+                        <input type="number" id="setting-max-news-history" min="10" max="200" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border" value="50">
                     </div>
                     <div class="flex gap-4">
-                        <button type="button" onclick="saveSettings()"
-                            class="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg">
-                            💾 บันทึก</button>
-                        <button type="button" onclick="loadSettings()"
-                            class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-4 rounded-xl shadow-lg">
-                            🔄 รีเซ็ต</button>
+                        <button type="button" onclick="saveSettings()" class="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg"> ����</button>
+                        <button type="button" onclick="loadSettings()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-4 rounded-xl shadow-lg"> �૵</button>
                     </div>
                 </form>
             </div>
@@ -410,7 +361,7 @@
     </div>
     <script>
         // CONFIGURATION: Local Node.js Server
-        const API_BASE = '/api';
+        const API_BASE = 'http://localhost:3000/api';
         const N8N_EXTRACT_URL = `${API_BASE}/extract`;
         const N8N_GET_TEXT_URL = `${API_BASE}/extract-text`; // New endpoint for text
         const N8N_GENERATE_URL = `${API_BASE}/generate`;
@@ -424,7 +375,6 @@
             if (page === 'create') {
                 document.getElementById('page-create').classList.remove('hidden');
                 document.getElementById('page-history').classList.add('hidden');
-                document.getElementById('page-settings').classList.add('hidden');
 
                 // Active Button Style
                 document.getElementById('nav-create').classList.add('bg-white', 'text-indigo-800', 'shadow-sm');
@@ -433,13 +383,10 @@
                 // Inactive Button Style
                 document.getElementById('nav-history').classList.remove('bg-white', 'text-indigo-800', 'shadow-sm');
                 document.getElementById('nav-history').classList.add('text-gray-600', 'hover:text-indigo-600');
-                document.getElementById('nav-settings').classList.remove('bg-white', 'text-indigo-800', 'shadow-sm');
-                document.getElementById('nav-settings').classList.add('text-gray-600', 'hover:text-indigo-600');
 
             } else if (page === 'history') {
                 document.getElementById('page-create').classList.add('hidden');
                 document.getElementById('page-history').classList.remove('hidden');
-                document.getElementById('page-settings').classList.add('hidden');
 
                 // Active Button Style
                 document.getElementById('nav-history').classList.add('bg-white', 'text-indigo-800', 'shadow-sm');
@@ -448,28 +395,9 @@
                 // Inactive Button Style
                 document.getElementById('nav-create').classList.remove('bg-white', 'text-indigo-800', 'shadow-sm');
                 document.getElementById('nav-create').classList.add('text-gray-600', 'hover:text-indigo-600');
-                document.getElementById('nav-settings').classList.remove('bg-white', 'text-indigo-800', 'shadow-sm');
-                document.getElementById('nav-settings').classList.add('text-gray-600', 'hover:text-indigo-600');
 
                 // Load Data
                 loadHistory();
-            } else if (page === 'settings') {
-                document.getElementById('page-create').classList.add('hidden');
-                document.getElementById('page-history').classList.add('hidden');
-                document.getElementById('page-settings').classList.remove('hidden');
-
-                // Active Button Style
-                document.getElementById('nav-settings').classList.add('bg-white', 'text-indigo-800', 'shadow-sm');
-                document.getElementById('nav-settings').classList.remove('text-gray-600', 'hover:text-indigo-600');
-
-                // Inactive Button Style
-                document.getElementById('nav-create').classList.remove('bg-white', 'text-indigo-800', 'shadow-sm');
-                document.getElementById('nav-create').classList.add('text-gray-600', 'hover:text-indigo-600');
-                document.getElementById('nav-history').classList.remove('bg-white', 'text-indigo-800', 'shadow-sm');
-                document.getElementById('nav-history').classList.add('text-gray-600', 'hover:text-indigo-600');
-
-                // Load Settings
-                loadSettings();
             }
         }
 
@@ -537,7 +465,7 @@
                 // Format Date
                 const date = new Date(item.created_at).toLocaleDateString('th-TH', {
                     year: 'numeric', month: 'short', day: 'numeric',
-                    hour: '2-digit', minute: '2-digit', hour12: false
+                    hour: '2-digit', minute: '2-digit'
                 });
 
                 const tr = document.createElement('tr');
@@ -556,7 +484,6 @@
                 tbody.appendChild(tr);
             });
         }
-
 
         function searchTable() {
             const input = document.getElementById('search-history');
@@ -748,10 +675,7 @@
                     method: 'POST',
                     body: formData
                 });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Network response was not ok');
-                }
+                if (!response.ok) throw new Error('Network response was not ok');
                 let data = await response.json();
                 processExtractionResponse(data);
             } catch (error) {
@@ -799,12 +723,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Network response was not ok');
-                }
-
+                if (!response.ok) throw new Error('Network response was not ok');
                 const data = await response.json();
                 let newsContent = data.output || data.news || data.text || JSON.stringify(data);
                 if (typeof newsContent === 'string' && newsContent.startsWith('{')) {
@@ -816,56 +735,6 @@
                 console.error(error);
                 Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', text: 'รายละเอียด: ' + error.message });
             }
-        }
-
-        function generateTemplateNews() {
-            // Get values
-            const dateStr = document.getElementById('date').value;
-            let timeStr = document.getElementById('time').value;
-            const presidentName = document.getElementById('president_name').value;
-            const presidentPosition = document.getElementById('president_position').value;
-            const eventName = document.getElementById('event_name').value;
-            const location = document.getElementById('location').value;
-            const participants = document.getElementById('participants_area').value;
-
-            // Validate required fields
-            if (!dateStr || !timeStr || !presidentName || !presidentPosition || !eventName || !location) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'กรุณากรอกข้อมูลให้ครบ',
-                    html: `ยังขาดข้อมูล:<br>
-                    ${!dateStr ? '- วันที่<br>' : ''}
-                    ${!timeStr ? '- เวลา<br>' : ''}
-                    ${!presidentName ? '- ชื่อประธาน<br>' : ''}
-                    ${!presidentPosition ? '- ตำแหน่งประธาน<br>' : ''}
-                    ${!eventName ? '- ชื่อกิจกรรม<br>' : ''}
-                    ${!location ? '- สถานที่<br>' : ''}`
-                });
-                return;
-            }
-
-            // Format Date (YYYY-MM-DD -> Thai Text)
-            let formattedDate = '';
-            if (dateStr) {
-                const d = new Date(dateStr + 'T00:00:00'); // Force local timezone
-                const thMonth = d.toLocaleDateString('th-TH', { month: 'long' });
-                const thDay = d.toLocaleDateString('th-TH', { weekday: 'long' });
-                const dayNum = d.getDate();
-                const thYear = d.getFullYear() + 543;
-                formattedDate = `${thDay} ที่ ${dayNum} ${thMonth} ${thYear}`;
-            }
-
-            // Format Time 09:00 -> 09.00น.
-            let formattedTime = '';
-            if (timeStr) {
-                formattedTime = timeStr.replace(':', '.') + 'น.';
-            }
-
-            // Construct Sentence
-            const template = `${formattedDate} เวลา ${formattedTime} ${presidentName} ${presidentPosition} เป็นประธาน ${eventName} โดยมี ${participants || 'เจ้าหน้าที่สำนักงานที่ดินจังหวัดนครพนม'} เข้าร่วมพิธีดังกล่าว ณ ${location}`;
-
-            document.getElementById('result-text').value = template;
-            Swal.fire({ icon: 'success', title: 'สร้างข้อความเรียบร้อย!', timer: 1500, showConfirmButton: false });
         }
 
         function updatePresident(val) {
@@ -1012,139 +881,6 @@
             }
         }
 
-        // --- Settings Functions ---
-        async function saveSettings() {
-            Swal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-
-            try {
-                const presidentsList = document.getElementById('setting-presidents-list').value.trim();
-                const participantsList = document.getElementById('setting-participants-list').value.trim();
-
-                const payload = {
-                    ai_model: document.getElementById('setting-ai-model').value,
-                    organization_name: document.getElementById('setting-organization-name').value,
-                    extraction_prompt: document.getElementById('setting-extraction-prompt').value,
-                    generation_prompt: document.getElementById('setting-generation-prompt').value,
-                    max_news_history: parseInt(document.getElementById('setting-max-news-history').value),
-                    presidents_list: presidentsList,
-                    participants_list: participantsList
-                };
-
-                const response = await fetch(`${API_BASE}/settings`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) throw new Error('Failed to save settings');
-
-                Swal.fire({ icon: 'success', title: 'บันทึกเรียบร้อย!', timer: 1500, showConfirmButton: false });
-
-                // Reload dropdowns/checkboxes
-                await initializePresidentsDropdown();
-                await initializeParticipantsCheckboxes();
-
-            } catch (error) {
-                console.error(error);
-                Swal.fire({ icon: 'error', title: 'บันทึกไม่สำเร็จ', text: error.message });
-            }
-        }
-
-        async function loadSettings() {
-            try {
-                const response = await fetch(`${API_BASE}/settings`);
-                if (!response.ok) throw new Error('Failed to load settings');
-
-                const data = await response.json();
-
-                document.getElementById('setting-ai-model').value = data.ai_model || 'gemini-1.5-flash';
-                document.getElementById('setting-organization-name').value = data.organization_name || '';
-                document.getElementById('setting-extraction-prompt').value = data.extraction_prompt || '';
-                document.getElementById('setting-generation-prompt').value = data.generation_prompt || '';
-                document.getElementById('setting-max-news-history').value = data.max_news_history || 50;
-
-                // Load lists
-                document.getElementById('setting-presidents-list').value = data.presidents_list || '';
-                document.getElementById('setting-participants-list').value = data.participants_list || '';
-
-            } catch (error) {
-                console.error('Error loading settings:', error);
-            }
-        }
-
-        async function initializePresidentsDropdown() {
-            const select = document.getElementById('president-select');
-            if (!select) return;
-
-            try {
-                const response = await fetch(`${API_BASE}/settings`);
-                const data = await response.json();
-
-                if (data.presidents_list) {
-                    const lines = data.presidents_list.trim().split('\n');
-                    select.innerHTML = '<option value="">-- เลือกจากรายการ --</option>';
-
-                    lines.forEach(line => {
-                        const [name, position] = line.split('|').map(s => s.trim());
-                        if (name && position) {
-                            const option = document.createElement('option');
-                            option.value = `${name}|${position}`;
-                            option.textContent = `${position} (${name})`;
-                            select.appendChild(option);
-                        }
-                    });
-                }
-            } catch (error) {
-                console.error('Error loading presidents:', error);
-            }
-        }
-
-        async function initializeParticipantsCheckboxes() {
-            const container = document.getElementById('participants-checkboxes-container');
-            if (!container) return;
-
-            try {
-                const response = await fetch(`${API_BASE}/settings`);
-                const data = await response.json();
-
-                if (data.participants_list) {
-                    const lines = data.participants_list.trim().split('\n');
-                    container.innerHTML = '';
-
-                    lines.forEach(line => {
-                        const [value, label] = line.split('|').map(s => s.trim());
-                        if (value && label) {
-                            const labelEl = document.createElement('label');
-                            labelEl.className = 'flex items-center space-x-2 cursor-pointer hover:bg-gray-100 p-1 rounded';
-
-                            const checkbox = document.createElement('input');
-                            checkbox.type = 'checkbox';
-                            checkbox.onchange = () => toggleParticipant(checkbox);
-                            checkbox.className = 'rounded text-indigo-600 focus:ring-indigo-500';
-                            checkbox.value = value;
-
-                            const span = document.createElement('span');
-                            span.className = 'text-sm';
-                            span.textContent = label;
-
-                            labelEl.appendChild(checkbox);
-                            labelEl.appendChild(span);
-                            container.appendChild(labelEl);
-                        }
-                    });
-                }
-            } catch (error) {
-                console.error('Error loading participants:', error);
-            }
-        }
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            initParticipants();
-            initializePresidentsDropdown();
-            initializeParticipantsCheckboxes();
-        });
+        document.addEventListener('DOMContentLoaded', initParticipants);
     </script>
-</body>
-
-</html>
+    ```

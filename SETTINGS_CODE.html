@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Page - Complete Code</title>
+</head>
+
+<body>
+    <!-- 
+===========================================
+💡 วิธีเพิ่ม Settings Page ใน index.html
+===========================================
+
+1. เพิ่ม Settings API URL หลัง N8N_DELETE_NEWS_URL
+   หาประมาณบรรทัด 334 แล้วเพิ่ม:
+-->
+    const N8N_SETTINGS_URL = `${API_BASE}/settings`;
+
+    <!-- 
+2. แทนที่ฟังก์ชัน switchPage() ทั้งหมด (ประมาณบรรทัด 337-364)
+-->
+    <script>
+        function switchPage(page) {
+            // Hide all pages
+            document.getElementById('page-create').classList.add('hidden');
+            document.getElementById('page-history').classList.add('hidden');
+            if (document.getElementById('page-settings')) {
+                document.getElementById('page-settings').classList.add('hidden');
+            }
+
+            // Reset all buttons
+            ['nav-create', 'nav-history', 'nav-settings'].forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) {
+                    btn.classList.remove('bg-white', 'text-indigo-800', 'shadow-sm');
+                    btn.classList.add('text-gray-600', 'hover:text-indigo-600');
+                }
+            });
+
+            // Show selected page
+            if (page === 'create') {
+                document.getElementById('page-create').classList.remove('hidden');
+                document.getElementById('nav-create').classList.add('bg-white', 'text-indigo-800', 'shadow-sm');
+                document.getElementById('nav-create').classList.remove('text-gray-600', 'hover:text-indigo-600');
+            } else if (page === 'history') {
+                document.getElementById('page-history').classList.remove('hidden');
+                document.getElementById('nav-history').classList.add('bg-white', 'text-indigo-800', 'shadow-sm');
+                document.getElementById('nav-history').classList.remove('text-gray-600', 'hover:text-indigo-600');
+                loadHistory();
+            } else if (page === 'settings') {
+                if (document.getElementById('page-settings')) {
+                    document.getElementById('page-settings').classList.remove('hidden');
+                    document.getElementById('nav-settings').classList.add('bg-white', 'text-indigo-800', 'shadow-sm');
+                    document.getElementById('nav-settings').classList.remove('text-gray-600', 'hover:text-indigo-600');
+                    loadSettings();
+                }
+            }
+        }
+
+        // เพิ่มก่อน </script> ท้ายสุด
+    async function loadSettings() {
+    try {
+    const response = await fetch(N8N_SETTINGS_URL);
+    if (!response.ok) throw new Error('Failed to load settings');
+
+    const settings = await response.json();
+
+    document.getElementById('setting-ai-model').value = settings.ai_model || 'gemini-1.5-flash';
+    document.getElementById('setting-organization-name').value = settings.organization_name || '';
+    document.getElementById('setting-extraction-prompt').value = settings.extraction_prompt || '';
+    document.getElementById('setting-generation-prompt').value = settings.generation_prompt || '';
+    document.getElementById('setting-max-news-history').value = settings.max_news_history || 50;
+
+    } catch (error) {
+    console.error('Load Settings Error:', error);
+    Swal.fire({ icon: 'error', title: 'โหลดค่าตั้งค่าไม่สำเร็จ', text: error.message });
+    }
+    }
+
+    async function saveSettings() {
+    Swal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+    const payload = {
+    ai_model: document.getElementById('setting-ai-model').value,
+    organization_name: document.getElementById('setting-organization-name').value,
+    extraction_prompt: document.getElementById('setting-extraction-prompt').value,
+    generation_prompt: document.getElementById('setting-generation-prompt').value,
+    max_news_history: parseInt(document.getElementById('setting-max-news-history').value) || 50
+    };
+
+    try {
+    const response = await fetch(N8N_SETTINGS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) throw new Error('Failed to save settings');
+
+    Swal.fire({ icon: 'success', title: 'บันทึกสำเร็จ!', text: 'การตั้งค่าใหม่จะมีผลทันที', timer: 2000,
+    showConfirmButton: false });
+
+    } catch (error) {
+    console.error('Save Settings Error:', error);
+    Swal.fire({ icon: 'error', title: 'บันทึกไม่สำเร็จ', text: error.message });
+    }
+    }
+    </script>
+
+</body>
+
+</html>

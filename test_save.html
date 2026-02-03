@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Test Save News API</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body class="bg-gray-100 p-10 font-sans">
+    <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-md">
+        <h1 class="text-xl font-bold mb-4 text-center">ทดสอบระบบบันทึกข่าว (API Test)</h1>
+
+        <div class="space-y-4">
+            <input type="text" id="test-title" value="ข่าวทดสอบ API" class="w-full border p-2 rounded"
+                placeholder="หัวข้อข่าว">
+            <textarea id="test-content" class="w-full border p-2 rounded h-24"
+                placeholder="เนื้อหาข่าว">เนื้อหาข่าวทดสอบระบบบันทึกข้อมูล...</textarea>
+
+            <button onclick="testSave()"
+                class="w-full bg-green-600 text-white py-3 rounded hover:bg-green-700 font-bold">
+                🚀 ยิง API ไปที่ n8n
+            </button>
+        </div>
+
+        <div id="log" class="mt-4 text-xs text-gray-500 bg-gray-50 p-2 rounded h-32 overflow-y-auto font-mono border">
+            Waiting for action...
+        </div>
+    </div>
+
+    <script>
+        // ใช้ URL นี้สำหรับการ Test (มี -test)
+        const N8N_TEST_URL = 'http://192.168.44.252:5678/webhook-test/save-news';
+
+        async function testSave() {
+            const logBox = document.getElementById('log');
+            logBox.innerText = 'Sending request to: ' + N8N_TEST_URL + '...';
+
+            const payload = {
+                title: document.getElementById('test-title').value,
+                content: document.getElementById('test-content').value,
+                summary: 'Summary Test',
+                source_url: '-',
+                tags: 'Test System'
+            };
+
+            try {
+                const response = await fetch(N8N_TEST_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    logBox.innerText += '\n✅ Success! Response: ' + JSON.stringify(data);
+                    Swal.fire('สำเร็จ', 'n8n ได้รับข้อมูลแล้ว!', 'success');
+                } else {
+                    logBox.innerText += '\n❌ Error: ' + response.status + ' ' + response.statusText;
+                    Swal.fire('พัง', 'ส่งข้อมูลไม่สำเร็จ (ดู Log)', 'error');
+                }
+            } catch (error) {
+                logBox.innerText += '\n❌ Network Error: ' + error.message;
+                Swal.fire('Network Error', 'เชื่อมต่อไม่ได้ (เช็ค IP/CORS)', 'error');
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,70 @@
+# ========================================
+# AI News Generator - Quick Deploy
+# Container IP: 192.168.44.252
+# ========================================
+
+# STEP 1: Upload code from Windows
+# Run this in PowerShell:
+
+cd "c:\Users\User\OneDrive - Nakhon Phanom University\app\n8n Ai"
+
+scp -r server.js index.html package.json package-lock.json Dockerfile docker-compose.prod.yml .env.example .dockerignore root@192.168.44.252:/opt/ai-news-generator/
+
+# Enter root password when prompted
+
+
+# ========================================
+# STEP 2: SSH to container
+# ========================================
+
+ssh root@192.168.44.252
+
+
+# ========================================
+# STEP 3: Run in container (after SSH)
+# ========================================
+
+# Go to project directory
+cd /opt/ai-news-generator
+
+# Setup environment
+cp .env.example .env
+nano .env
+# Add your GEMINI_API_KEY, then save (Ctrl+O, Enter, Ctrl+X)
+
+# Build and run
+docker-compose -f docker-compose.prod.yml build
+docker-compose -f docker-compose.prod.yml up -d
+
+# Check logs
+docker-compose -f docker-compose.prod.yml logs -f
+
+# Press Ctrl+C to exit logs
+
+
+# ========================================
+# STEP 4: Access the app
+# ========================================
+
+# Open browser:
+# http://192.168.44.252:3000
+
+
+# ========================================
+# Useful Commands
+# ========================================
+
+# View logs
+docker-compose -f docker-compose.prod.yml logs -f
+
+# Restart
+docker-compose -f docker-compose.prod.yml restart
+
+# Stop
+docker-compose -f docker-compose.prod.yml down
+
+# Status
+docker ps
+
+# Backup database
+cp news.db news.db.backup-$(date +%Y%m%d)
